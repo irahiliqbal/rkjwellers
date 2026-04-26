@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Raj Kumar Sarraf Jewellers | Akbarpur, Uttar Pradesh</title>
+  <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Lato:ital,wght@0,300;0,400;0,700;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    :root {
+      --w:#faf7f2; --w2:#f2ece2; --g:#1a2e20; --g2:#243d2a;
+      --gold:#b8953a; --gold2:#d4b05a; --ink:#1a1a18;
+      --muted:#7a7060; --line:#ddd6c8;
+    }
+    html { scroll-behavior:smooth; }
+    body { background:var(--w); color:var(--ink); font-family:'Lato',sans-serif; font-weight:300; overflow-x:hidden; }
+    ::-webkit-scrollbar { width:3px; } ::-webkit-scrollbar-thumb { background:var(--gold); }
+    img { display:block; } a { text-decoration:none; }
+
+    /* ═══ NAV ═══════════════════════════════════════ */
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:500;
+      height:68px;
+      display:grid; grid-template-columns:1fr auto 1fr;
+      align-items:center; padding:0 48px;
+      transition:background .4s, box-shadow .4s;
+    }
+    nav.solid {
+      background:var(--w);
+      border-bottom:1px solid var(--line);
+      box-shadow:0 4px 32px rgba(26,46,32,.07);
+    }
+    nav.transparent { background:transparent; }
+    .nav-left { display:flex; gap:32px; align-items:center; }
+    .nav-left a, .nav-right a {
+      font-family:'DM Mono',monospace; font-size:11px;
+      letter-spacing:1.5px; text-transform:uppercase;
+      transition:color .25s;
+    }
+    nav.transparent .nav-left a,
+    nav.transparent .nav-right a { color:rgba(255,255,255,.7); }
+    nav.transparent .nav-left a:hover,
+    nav.transparent .nav-right a:hover { color:#fff; }
+    nav.solid .nav-left a, nav.solid .nav-right a { color:var(--muted); }
+    nav.solid .nav-left a:hover, nav.solid .nav-right a:hover { color:var(--g); }
+    .nav-center img { height:48px; width:auto; transition:filter .4s; }
+    nav.transparent .nav-center img { filter:brightness(0) invert(1); }
+    .nav-right { display:flex; gap:32px; align-items:center; justify-content:flex-end; }
+    .nav-wa {
+      background:var(--gold); color:#fff !important;
+      padding:9px 20px;
+      font-family:'DM Mono',monospace; font-size:11px; letter-spacing:1px;
+      display:flex; align-items:center; gap:7px;
+      transition:background .25s;
+    }
+    nav.transparent .nav-wa { background:rgba(184,149,58,.85); }
+    .nav-wa:hover { background:var(--ink) !important; }
+    .nav-wa svg { width:14px; height:14px; }
+    .hamburger {
+      display:none; grid-column:3; justify-self:flex-end;
+      background:none; border:none; cursor:pointer; padding:4px;
+      flex-direction:column; gap:5px;
+    }
+    .hamburger span { display:block; width:22px; height:1.5px; transition:background .3s; }
+    nav.solid .hamburger span { background:var(--ink); }
+    nav.transparent .hamburger span { background:#fff; }
+
+    /* DRAWER */
+    .drawer { display:none; position:fixed; inset:0; background:var(--g); z-index:600; flex-direction:column; align-items:center; justify-content:center; gap:36px; }
+    .drawer.open { display:flex; }
+    .drawer-x { position:absolute; top:22px; right:28px; background:none; border:none; font-size:28px; cursor:pointer; color:rgba(255,255,255,.7); }
+    .drawer img { height:44px; width:auto; margin-bottom:16px; filter:brightness(0) invert(1); }
+    .drawer a { font-family:'Italiana',serif; font-size:30px; color:rgba(255,255,255,.85); transition:color .25s; }
+    .drawer a:hover { color:var(--gold2); }
+    .drawer-wa {
+      display:inline-flex; align-items:center; gap:10px;
+      background:#25D366; color:#fff !important;
+      padding:13px 32px; font-family:'DM Mono',monospace;
+      font-size:12px; letter-spacing:2px; text-transform:uppercase;
+      margin-top:8px;
+    }
+    .drawer-wa svg { width:18px; height:18px; }
+
+    /* ═══ HERO SLIDER ════════════════════════════════ */
+    #hero {
+      position:relative;
+      height:100vh; min-height:600px;
+      overflow:hidden;
+    }
+
+    /* Slides */
+    .slides { position:absolute; inset:0; }
+    .slide {
+      position:absolute; inset:0;
+      opacity:0;
+      transition:opacity 1.2s cubic-bezier(.4,0,.2,1);
+    }
+    .slide.active { opacity:1; }
+    .slide.prev { opacity:0; }
+    .slide-bg {
+      position:absolute; inset:0;
+      background-size:cover; background-position:center;
+      transform:scale(1.08);
+      transition:transform 7s cubic-bezier(.2,0,.1,1);
+    }
+    .slide.active .slide-bg { transform:scale(1); }
+
+    /* Slide overlays — each different for variety */
+    .slide:nth-child(1) .slide-bg { background-image:url('1.jpg'); }
+    .slide:nth-child(2) .slide-bg { background-image:url('2.jpg'); background-position:60% center; }
+    .slide:nth-child(3) .slide-bg { background-image:url('3.jpg'); background-position:50% 30%; }
+
+    .slide-overlay {
+      position:absolute; inset:0;
+    }
+    .slide:nth-child(1) .slide-overlay {
+      background:linear-gradient(110deg, rgba(26,46,32,.82) 0%, rgba(26,46,32,.45) 50%, rgba(26,46,32,.15) 100%);
+    }
+    .slide:nth-child(2) .slide-overlay {
+      background:linear-gradient(to right, rgba(26,20,10,.85) 0%, rgba(26,20,10,.4) 55%, rgba(26,20,10,.1) 100%);
+    }
+    .slide:nth-child(3) .slide-overlay {
+      background:linear-gradient(135deg, rgba(26,26,24,.88) 0%, rgba(26,26,24,.35) 60%, transparent 100%);
+    }
+
+    /* Slide content */
+    .slide-content {
+      position:absolute; inset:0;
+      display:flex; align-items:flex-end;
+      padding:0 7% 10%;
+    }
+    .slide-text { max-width:580px; }
+    .slide-tag {
+      display:inline-flex; align-items:center; gap:12px;
+      font-family:'DM Mono',monospace; font-size:11px;
+      letter-spacing:3px; text-transform:uppercase;
+      color:var(--gold2);
+      margin-bottom:20px;
+      opacity:0; transform:translateY(18px);
+      transition:opacity .7s ease .3s, transform .7s ease .3s;
+    }
+    .slide-tag::before { content:''; width:24px; height:1px; background:var(--gold); }
+    .slide.active .slide-tag { opacity:1; transform:translateY(0); }
+
+    .slide-h1 {
+      font-family:'Italiana',serif;
+      font-size:clamp(44px, 6.5vw, 96px);
+      font-weight:400; line-height:1.08;
+      color:#fff; margin-bottom:20px;
+      opacity:0; transform:translateY(28px);
+      transition:opacity .8s ease .5s, transform .8s ease .5s;
+    }
+    .slide-h1 em { color:var(--gold2); font-style:italic; display:block; }
+    .slide.active .slide-h1 { opacity:1; transform:translateY(0); }
+
+    .slide-p {
+      font-size:15px; font-weight:300;
+      color:rgba(255,255,255,.65);
+      line-height:1.8; margin-bottom:40px;
+      max-width:420px;
+      opacity:0; transform:translateY(18px);
+      transition:opacity .7s ease .7s, transform .7s ease .7s;
+    }
+    .slide.active .slide-p { opacity:1; transform:translateY(0); }
+
+    .slide-btns {
+      display:flex; gap:14px; flex-wrap:wrap;
+      opacity:0; transform:translateY(16px);
+      transition:opacity .7s ease .9s, transform .7s ease .9s;
+    }
+    .slide.active .slide-btns { opacity:1; transform:translateY(0); }
+
+    .btn-solid {
+      background:var(--gold); color:#fff;
+      padding:13px 30px;
+      font-family:'DM Mono',monospace; font-size:11px;
+      letter-spacing:2px; text-transform:uppercase;
+      transition:background .25s;
+    }
+    .btn-solid:hover { background:#9a7a2e; }
+    .btn-ghost {
+      border:1px solid rgba(255,255,255,.45); color:#fff;
+      padding:13px 30px;
+      font-family:'DM Mono',monospace; font-size:11px;
+      letter-spacing:2px; text-transform:uppercase;
+      display:flex; align-items:center; gap:8px;
+      transition:all .25s;
+    }
+    .btn-ghost:hover { border-color:#fff; background:rgba(255,255,255,.08); }
+    .btn-ghost svg { width:15px; height:15px; }
+
+    /* Slide number / progress */
+    .slide-counter {
+      position:absolute; bottom:10%; right:7%;
+      display:flex; flex-direction:column; align-items:center; gap:8px;
+      z-index:10;
+    }
+    .slide-num {
+      font-family:'DM Mono',monospace; font-size:11px;
+      letter-spacing:2px; color:rgba(255,255,255,.5);
+    }
+    .slide-num span { color:#fff; font-size:18px; font-family:'Italiana',serif; }
+    .slide-bars { display:flex; gap:8px; align-items:center; }
+    .slide-bar {
+      width:28px; height:1.5px;
+      background:rgba(255,255,255,.25);
+      cursor:pointer; position:relative; overflow:hidden;
+      transition:width .3s;
+    }
+    .slide-bar::after {
+      content:''; position:absolute; inset:0;
+      background:var(--gold2);
+      transform:scaleX(0); transform-origin:left;
+    }
+    .slide-bar.active { width:48px; }
+    .slide-bar.active::after {
+      animation:barFill 6s linear forwards;
+    }
+    @keyframes barFill { to { transform:scaleX(1); } }
+
+    /* Nav arrows */
+    .slide-arrow {
+      position:absolute; top:50%; z-index:10;
+      transform:translateY(-50%);
+      background:rgba(255,255,255,.1);
+      border:1px solid rgba(255,255,255,.2);
+      backdrop-filter:blur(4px);
+      width:48px; height:48px;
+      display:flex; align-items:center; justify-content:center;
+      color:#fff; font-size:18px; cursor:pointer;
+      transition:background .25s, border-color .25s;
+    }
+    .slide-arrow:hover { background:rgba(255,255,255,.2); border-color:rgba(255,255,255,.5); }
+    .arrow-prev { left:3%; }
+    .arrow-next { right:3%; }
+
+    /* Vignette */
+    #hero::after {
+      content:''; position:absolute; inset:0;
+      background:radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,.35) 100%);
+      pointer-events:none; z-index:2;
+    }
+    .slide-content { z-index:5; }
+    .slide-counter { z-index:5; }
+    .slide-arrow { z-index:5; }
+
+    /* ═══ TICKER ═════════════════════════════════════ */
+    .ticker { background:var(--g); padding:14px 0; overflow:hidden; border-top:1px solid rgba(184,149,58,.15); }
+    .ticker-track { display:flex; white-space:nowrap; animation:tickerRun 28s linear infinite; }
+    .ticker-item { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,.5); padding:0 32px; }
+    .ticker-item span { color:var(--gold2); }
+    @keyframes tickerRun { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    /* ═══ TRUST ══════════════════════════════════════ */
+    #trust { background:var(--w2); border-top:1px solid var(--line); border-bottom:1px solid var(--line); display:grid; grid-template-columns:repeat(4,1fr); }
+    .trust-cell { padding:44px 28px; border-right:1px solid var(--line); text-align:center; }
+    .trust-cell:last-child { border-right:none; }
+    .trust-num { font-family:'Italiana',serif; font-size:52px; color:var(--g); line-height:1; }
+    .trust-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin:8px 0 6px; }
+    .trust-desc { font-size:13px; color:var(--muted); line-height:1.5; }
+
+    /* ═══ SECTION BASE ═══════════════════════════════ */
+    .sec-header { margin-bottom:56px; }
+    .label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); display:inline-block; margin-bottom:16px; }
+    .heading { font-family:'Italiana',serif; font-size:clamp(32px,4vw,60px); font-weight:400; line-height:1.15; color:var(--ink); }
+    .heading em { font-style:italic; color:var(--gold); }
+    .body-text { font-size:15px; line-height:1.85; color:var(--muted); max-width:560px; }
+
+    /* ═══ COLLECTIONS ════════════════════════════════ */
+    #collections { background:var(--w); padding:100px 72px; }
+    .collections-asymmetric { display:grid; grid-template-columns:1.2fr 0.9fr 0.9fr; grid-template-rows:320px 320px; gap:3px; }
+    .cat-card { position:relative; overflow:hidden; background:var(--ink); }
+    .cat-card.tall { grid-row:span 2; }
+    .cat-card img { width:100%; height:100%; object-fit:cover; transition:transform .55s ease, filter .4s; filter:brightness(.82); }
+    .cat-card:hover img { transform:scale(1.05); filter:brightness(.65); }
+    .cat-info { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end; padding:28px 26px; background:linear-gradient(to top, rgba(26,46,32,.72) 0%, transparent 55%); }
+    .cat-num { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; color:var(--gold2); margin-bottom:6px; }
+    .cat-name { font-family:'Italiana',serif; font-size:22px; color:#fff; }
+    .cat-cta { margin-top:10px; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--gold2); display:inline-flex; align-items:center; gap:6px; opacity:0; transform:translateY(8px); transition:all .3s; }
+    .cat-card:hover .cat-cta { opacity:1; transform:translateY(0); }
+
+    /* ═══ SPLIT ══════════════════════════════════════ */
+    .split { display:grid; grid-template-columns:1fr 1fr; min-height:520px; }
+    .split.reverse { direction:rtl; } .split.reverse > * { direction:ltr; }
+    .split-img { overflow:hidden; }
+    .split-img img { width:100%; height:100%; object-fit:cover; transition:transform .6s ease; }
+    .split:hover .split-img img { transform:scale(1.04); }
+    .split-body { background:var(--g2); padding:72px 64px; display:flex; flex-direction:column; justify-content:center; }
+    .split-body.light { background:var(--w2); }
+    .split-body .label { color:var(--gold2); }
+    .split-body .heading { color:#fff; }
+    .split-body.light .heading { color:var(--ink); }
+    .split-body .body-text { color:rgba(255,255,255,.6); margin:20px 0 36px; }
+    .split-body.light .body-text { color:var(--muted); }
+    .split-enquire { display:inline-flex; align-items:center; gap:10px; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--gold2); transition:gap .25s; }
+    .split-enquire::after { content:'→'; }
+    .split-enquire:hover { gap:14px; }
+    .split-body.light .split-enquire { color:var(--gold); }
+
+    /* ═══ ABOUT ══════════════════════════════════════ */
+    #about { background:var(--g); padding:100px 72px; display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+    #about .heading { color:#fff; } #about .label { color:var(--gold2); }
+    #about .body-text { color:rgba(255,255,255,.6); margin-top:20px; }
+    .about-img { position:relative; }
+    .about-img img { width:100%; aspect-ratio:3/4; object-fit:cover; }
+    .about-img-frame { position:absolute; top:20px; left:20px; right:-20px; bottom:-20px; border:1px solid rgba(184,149,58,.25); pointer-events:none; z-index:-1; }
+    .about-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:0; margin-top:48px; border-top:1px solid rgba(184,149,58,.2); border-left:1px solid rgba(184,149,58,.2); }
+    .about-stat { padding:24px 20px; border-bottom:1px solid rgba(184,149,58,.2); border-right:1px solid rgba(184,149,58,.2); text-align:center; }
+    .about-stat-n { font-family:'Italiana',serif; font-size:36px; color:var(--gold2); line-height:1; }
+    .about-stat-l { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,.4); margin-top:6px; }
+
+    /* ═══ GALLERY ════════════════════════════════════ */
+    #gallery { background:var(--w); padding:100px 72px; }
+    .masonry { display:grid; grid-template-columns:repeat(4,1fr); gap:4px; }
+    .masonry-item { overflow:hidden; position:relative; }
+    .masonry-item.tall { grid-row:span 2; }
+    .masonry-item img { width:100%; height:100%; object-fit:cover; transition:transform .5s ease; display:block; }
+    .masonry-item:hover img { transform:scale(1.06); }
+    .masonry-item::after { content:''; position:absolute; inset:0; background:rgba(26,46,32,0); transition:background .3s; }
+    .masonry-item:hover::after { background:rgba(26,46,32,.18); }
+
+    /* ═══ WHATSAPP ═══════════════════════════════════ */
+    #whatsapp { background:var(--w2); border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:88px 72px; display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+    .wa-left .heading { font-size:clamp(28px,3.5vw,52px); }
+    .wa-left .body-text { margin-top:16px; }
+    .wa-right { display:flex; flex-direction:column; align-items:flex-start; gap:20px; }
+    .wa-big-btn { display:inline-flex; align-items:center; gap:14px; background:#25D366; color:#fff; padding:18px 40px; font-family:'DM Mono',monospace; font-size:12px; letter-spacing:2px; text-transform:uppercase; transition:background .25s, transform .25s; }
+    .wa-big-btn:hover { background:#1ea853; transform:translateY(-2px); }
+    .wa-big-btn svg { width:20px; height:20px; }
+    .wa-or { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); }
+    .wa-phone { font-family:'Italiana',serif; font-size:32px; color:var(--g); letter-spacing:1px; }
+    .wa-avail { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); }
+
+    /* ═══ TESTIMONIALS ═══════════════════════════════ */
+    #testimonials { background:var(--w); padding:100px 72px; }
+    .testi-row { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); margin-top:56px; }
+    .testi-cell { background:var(--w); padding:44px 36px; }
+    .testi-quote { font-family:'Italiana',serif; font-size:56px; color:var(--gold); opacity:.25; line-height:.8; margin-bottom:16px; }
+    .testi-body { font-family:'Lato',sans-serif; font-style:italic; font-size:15px; line-height:1.85; color:var(--muted); margin-bottom:28px; }
+    .testi-stars { font-size:12px; letter-spacing:3px; color:var(--gold); margin-bottom:16px; }
+    .testi-name { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--ink); }
+    .testi-loc { font-size:12px; color:var(--muted); margin-top:3px; }
+
+    /* ═══ STORE ══════════════════════════════════════ */
+    #store { display:grid; grid-template-columns:1fr 1fr; }
+    .store-map { height:500px; }
+    .store-map iframe { width:100%; height:100%; border:none; display:block; }
+    .store-panel { background:var(--g); padding:72px 60px; display:flex; flex-direction:column; justify-content:center; }
+    .store-panel .label { color:var(--gold2); }
+    .store-panel .heading { color:#fff; font-size:40px; margin-bottom:40px; }
+    .store-row { display:flex; gap:16px; align-items:flex-start; margin-bottom:24px; }
+    .store-ico { width:36px; height:36px; border:1px solid rgba(184,149,58,.3); display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+    .store-lbl { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--gold2); margin-bottom:4px; }
+    .store-val { font-size:14px; color:rgba(255,255,255,.65); line-height:1.6; }
+    .store-val a { color:rgba(255,255,255,.65); transition:color .25s; }
+    .store-val a:hover { color:var(--gold2); }
+    .store-hours { margin:32px 0; padding:20px 24px; border:1px solid rgba(184,149,58,.15); background:rgba(184,149,58,.04); }
+    .store-hour-row { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid rgba(255,255,255,.05); }
+    .store-hour-row:last-child { border-bottom:none; }
+    .store-hour-row span { font-family:'DM Mono',monospace; font-size:11px; }
+    .store-hour-row span:first-child { color:rgba(255,255,255,.7); }
+    .store-hour-row span:last-child { color:var(--gold2); }
+    .dir-btn { display:inline-flex; align-items:center; gap:8px; background:var(--gold); color:#fff; padding:12px 26px; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; transition:background .25s; }
+    .dir-btn:hover { background:#9a7a2e; }
+
+    /* ═══ FOOTER ══════════════════════════════════════ */
+    footer { background:var(--ink); }
+    .foot-main { padding:80px 72px 56px; display:grid; grid-template-columns:1.8fr 1fr 1fr 1fr; gap:48px; }
+    .foot-logo img { height:46px; width:auto; margin-bottom:22px; }
+    .foot-desc { font-size:13px; color:rgba(255,255,255,.35); line-height:1.85; margin-bottom:28px; }
+    .foot-socials { display:flex; gap:10px; }
+    .soc { width:34px; height:34px; border:1px solid rgba(255,255,255,.1); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.35); font-size:12px; transition:all .25s; }
+    .soc:hover { border-color:var(--gold); color:var(--gold); }
+    .foot-col-title { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--gold2); margin-bottom:24px; padding-bottom:12px; border-bottom:1px solid rgba(255,255,255,.06); }
+    .foot-links { list-style:none; display:flex; flex-direction:column; gap:12px; }
+    .foot-links a { font-size:13px; color:rgba(255,255,255,.35); transition:color .25s; }
+    .foot-links a:hover { color:var(--gold2); }
+    .foot-contact { display:flex; flex-direction:column; gap:14px; }
+    .fci { display:flex; gap:10px; align-items:flex-start; }
+    .fci-ico { font-size:13px; color:var(--gold); margin-top:1px; flex-shrink:0; }
+    .fci-txt { font-size:13px; color:rgba(255,255,255,.35); line-height:1.6; }
+    .fci-txt a { color:rgba(255,255,255,.35); transition:color .25s; }
+    .fci-txt a:hover { color:var(--gold2); }
+    .foot-bottom { border-top:1px solid rgba(255,255,255,.05); padding:22px 72px; display:flex; align-items:center; justify-content:space-between; }
+    .foot-copy { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1px; color:rgba(255,255,255,.2); }
+    .foot-copy span { color:var(--gold); }
+    .back-top { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,.25); border:1px solid rgba(255,255,255,.1); padding:8px 14px; transition:all .25s; }
+    .back-top:hover { border-color:var(--gold); color:var(--gold); }
+
+    /* FLOAT WA */
+    .float-wa { position:fixed; bottom:28px; right:28px; z-index:90; width:50px; height:50px; background:#25D366; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(37,211,102,.3); transition:transform .25s; }
+    .float-wa:hover { transform:scale(1.1); }
+    .float-wa svg { width:23px; height:23px; color:#fff; }
+
+    /* FADE IN */
+    .f { opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease; }
+    .f.i { opacity:1; transform:translateY(0); }
+    .f-l { opacity:0; transform:translateX(-28px); transition:opacity .7s ease, transform .7s ease; }
+    .f-l.i { opacity:1; transform:translateX(0); }
+    .f-r { opacity:0; transform:translateX(28px); transition:opacity .7s ease, transform .7s ease; }
+    .f-r.i { opacity:1; transform:translateX(0); }
+
+    /* ═══ RESPONSIVE ══════════════════════════════════ */
+
+    /* ── 1280px */
+    @media(max-width:1280px){
+      nav { padding:0 36px; }
+      #collections,#about,#gallery,#testimonials,#whatsapp { padding-left:48px; padding-right:48px; }
+      .foot-main { padding:72px 48px 48px; } .foot-bottom { padding:20px 48px; }
+    }
+
+    /* ── 1100px */
+    @media(max-width:1100px){
+      #collections,#about,#gallery,#testimonials,#whatsapp { padding-left:36px; padding-right:36px; }
+      .foot-main { grid-template-columns:1fr 1fr; padding:60px 36px 48px; gap:40px; }
+      .foot-bottom { padding:20px 36px; }
+      #store { grid-template-columns:1fr; }
+      .store-panel { padding:56px 40px; }
+      .store-map { height:350px; }
+      #trust { } /* keep 4 col */
+    }
+
+    /* ── 960px */
+    @media(max-width:960px){
+      nav { padding:0 24px; grid-template-columns:auto 1fr; height:60px; }
+      .nav-left, .nav-right { display:none; }
+      .hamburger { display:flex; grid-column:2; }
+      .nav-center { grid-column:1; }
+      nav.transparent .nav-center img { filter:brightness(0) invert(1); }
+
+      #hero { min-height:100svh; }
+      .slide-content { padding:0 6% 12%; }
+      .slide-h1 { font-size:clamp(40px,7vw,72px); }
+      .arrow-prev { left:2%; } .arrow-next { right:2%; }
+      .slide-arrow { width:40px; height:40px; font-size:16px; }
+
+      #trust { grid-template-columns:repeat(2,1fr); }
+      .trust-cell:nth-child(2) { border-right:none; }
+      .trust-cell:nth-child(3) { border-top:1px solid var(--line); border-right:1px solid var(--line); }
+      .trust-cell:nth-child(4) { border-top:1px solid var(--line); }
+
+      .split { grid-template-columns:1fr; min-height:auto; }
+      .split.reverse { direction:ltr; }
+      .split-img { height:340px; }
+      .split-body { padding:52px 36px; }
+
+      #about { grid-template-columns:1fr; padding:80px 36px; gap:56px; }
+      .about-img-frame { right:-12px; bottom:-12px; }
+
+      #whatsapp { grid-template-columns:1fr; padding:80px 36px; gap:48px; }
+      .wa-right { align-items:flex-start; }
+
+      .testi-row { grid-template-columns:1fr; }
+      .testi-cell:not(:last-child) { border-bottom:1px solid var(--line); }
+
+      .collections-asymmetric {
+        grid-template-columns:1fr 1fr;
+        grid-template-rows:260px 260px 260px;
+      }
+      .cat-card.tall { grid-row:span 1; }
+
+      #collections,#gallery,#testimonials { padding-top:72px; padding-bottom:72px; }
+    }
+
+    /* ── 768px */
+    @media(max-width:768px){
+      .masonry { grid-template-columns:1fr 1fr; }
+      .masonry-item.tall { grid-row:span 1; }
+      .masonry-item:nth-child(1) { grid-column:span 2; height:280px; }
+      .masonry-item { height:200px; }
+
+      .foot-main { grid-template-columns:1fr; gap:36px; padding:48px 28px 40px; }
+      .foot-bottom { padding:18px 28px; flex-direction:column; gap:12px; text-align:center; }
+
+      #store { }
+      .store-panel { padding:48px 28px; }
+      .store-panel .heading { font-size:32px; margin-bottom:28px; }
+
+      #collections,#about,#gallery,#testimonials,#whatsapp { padding-left:24px; padding-right:24px; }
+      .split-body { padding:48px 24px; }
+
+      .slide-counter { display:none; }
+    }
+
+    /* ── 640px */
+    @media(max-width:640px){
+      nav { height:56px; }
+      .nav-center img { height:36px; }
+
+      .collections-asymmetric { grid-template-columns:1fr; grid-template-rows:auto; }
+      .cat-card { height:260px; }
+
+      #trust { grid-template-columns:1fr 1fr; }
+
+      .slide-content { padding:0 5% 16%; }
+      .slide-h1 { font-size:clamp(36px,9vw,60px); }
+      .slide-p { font-size:14px; margin-bottom:28px; }
+      .slide-btns { flex-direction:column; gap:10px; }
+      .btn-solid, .btn-ghost { width:100%; justify-content:center; padding:14px 20px; }
+      .slide-arrow { display:none; }
+
+      #about { padding:64px 20px; gap:40px; }
+      .about-img-frame { display:none; }
+      .about-stats { grid-template-columns:repeat(3,1fr); }
+      .about-stat-n { font-size:28px; }
+
+      #whatsapp { padding:64px 20px; }
+      .wa-phone { font-size:26px; }
+      .wa-big-btn { padding:15px 28px; font-size:11px; width:100%; justify-content:center; }
+
+      #testimonials { padding:64px 20px; }
+      #gallery { padding:64px 20px; }
+      #collections { padding:64px 20px; }
+
+      .split-body { padding:40px 20px; }
+      .split-img { height:280px; }
+
+      .masonry { gap:3px; }
+      .masonry-item:nth-child(1) { height:240px; }
+      .masonry-item { height:160px; }
+
+      .testi-cell { padding:32px 24px; }
+
+      .store-panel { padding:40px 20px; }
+      .foot-main { padding:40px 20px 32px; }
+      .foot-bottom { padding:16px 20px; }
+    }
+
+    /* ── 400px */
+    @media(max-width:400px){
+      .slide-h1 { font-size:clamp(32px,10vw,52px); }
+      #trust { grid-template-columns:1fr; }
+      .trust-cell { border-right:none; border-bottom:1px solid var(--line); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Float WA -->
+<a href="https://wa.me/917607456789" class="float-wa" target="_blank">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- Drawer -->
+<div class="drawer" id="drawer">
+  <button class="drawer-x" onclick="closeD()">✕</button>
+  <img src="logo.png" alt="RKS Jewellers"/>
+  <a href="#collections" onclick="closeD()">Collections</a>
+  <a href="#about" onclick="closeD()">About Us</a>
+  <a href="#gallery" onclick="closeD()">Gallery</a>
+  <a href="#store" onclick="closeD()">Visit Store</a>
+  <a href="https://wa.me/917607456789" class="drawer-wa" target="_blank" onclick="closeD()">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Chat on WhatsApp
+  </a>
+</div>
+
+<!-- NAV -->
+<nav id="nav" class="transparent">
+  <div class="nav-left">
+    <a href="#collections">Collections</a>
+    <a href="#about">About</a>
+    <a href="#gallery">Gallery</a>
+  </div>
+  <div class="nav-center">
+    <a href="#"><img src="logo.png" alt="Raj Kumar Sarraf Jewellers"/></a>
+  </div>
+  <div class="nav-right">
+    <a href="#store">Visit Store</a>
+    <a href="https://wa.me/917607456789" class="nav-wa" target="_blank">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      WhatsApp
+    </a>
+  </div>
+  <button class="hamburger" onclick="openD()"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- ═══ HERO SLIDER ═══════════════════════════════════ -->
+<section id="hero">
+  <div class="slides" id="slides">
+
+    <!-- Slide 1 -->
+    <div class="slide active" id="slide-0">
+      <div class="slide-bg"></div>
+      <div class="slide-overlay"></div>
+      <div class="slide-content">
+        <div class="slide-text">
+          <div class="slide-tag">Since 1999 · Akbarpur, UP</div>
+          <h1 class="slide-h1">Where Gold<br/>Meets <em>Legacy</em></h1>
+          <p class="slide-p">Trusted jewellers in the heart of Uttar Pradesh — crafting pieces that carry love, heritage and brilliance for generations.</p>
+          <div class="slide-btns">
+            <a href="#collections" class="btn-solid">Explore Collections</a>
+            <a href="https://wa.me/917607456789?text=Hello! I'd like to enquire about your jewellery." class="btn-ghost" target="_blank">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Chat Now
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="slide" id="slide-1">
+      <div class="slide-bg"></div>
+      <div class="slide-overlay"></div>
+      <div class="slide-content">
+        <div class="slide-text">
+          <div class="slide-tag">Signature Ring Collection</div>
+          <h1 class="slide-h1">Timeless<br/><em>Beauty</em></h1>
+          <p class="slide-p">A diamond ring that speaks of commitment, elegance and eternal love — crafted with precision in rose gold.</p>
+          <div class="slide-btns">
+            <a href="https://wa.me/917607456789?text=I'm interested in your Ring collection" class="btn-solid" target="_blank">Enquire Now</a>
+            <a href="#collections" class="btn-ghost">View All Collections</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="slide" id="slide-2">
+      <div class="slide-bg"></div>
+      <div class="slide-overlay"></div>
+      <div class="slide-content">
+        <div class="slide-text">
+          <div class="slide-tag">Signature Earring Collection</div>
+          <h1 class="slide-h1">A Forever<br/><em>Promise</em></h1>
+          <p class="slide-p">Golden stud earrings encrusted with brilliant diamonds — designed for every celebration, from festivals to weddings.</p>
+          <div class="slide-btns">
+            <a href="https://wa.me/917607456789?text=I'm interested in your Earring collection" class="btn-solid" target="_blank">Enquire Now</a>
+            <a href="#collections" class="btn-ghost">View All Collections</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /slides -->
+
+  <!-- Arrows -->
+  <button class="slide-arrow arrow-prev" onclick="changeSlide(-1)">&#8592;</button>
+  <button class="slide-arrow arrow-next" onclick="changeSlide(1)">&#8594;</button>
+
+  <!-- Progress bars -->
+  <div class="slide-counter">
+    <div class="slide-bars">
+      <div class="slide-bar active" onclick="goToSlide(0)"></div>
+      <div class="slide-bar" onclick="goToSlide(1)"></div>
+      <div class="slide-bar" onclick="goToSlide(2)"></div>
+    </div>
+    <div class="slide-num" id="slideNum"><span>01</span> / 03</div>
+  </div>
+
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">Diamond Rings <span>·</span></span>
+    <span class="ticker-item">Gold Necklaces <span>·</span></span>
+    <span class="ticker-item">Diamond Earrings <span>·</span></span>
+    <span class="ticker-item">Diamond Kadas <span>·</span></span>
+    <span class="ticker-item">Gold Chains <span>·</span></span>
+    <span class="ticker-item">Diamond Bangles <span>·</span></span>
+    <span class="ticker-item">Bridal Collections <span>·</span></span>
+    <span class="ticker-item">Custom Designs <span>·</span></span>
+    <span class="ticker-item">Diamond Rings <span>·</span></span>
+    <span class="ticker-item">Gold Necklaces <span>·</span></span>
+    <span class="ticker-item">Diamond Earrings <span>·</span></span>
+    <span class="ticker-item">Diamond Kadas <span>·</span></span>
+    <span class="ticker-item">Gold Chains <span>·</span></span>
+    <span class="ticker-item">Diamond Bangles <span>·</span></span>
+    <span class="ticker-item">Bridal Collections <span>·</span></span>
+    <span class="ticker-item">Custom Designs <span>·</span></span>
+  </div>
+</div>
+
+<!-- TRUST -->
+<div id="trust">
+  <div class="trust-cell f"><div class="trust-num">25+</div><div class="trust-label">Years of Legacy</div><p class="trust-desc">Trusted by families across Uttar Pradesh</p></div>
+  <div class="trust-cell f"><div class="trust-num">BIS</div><div class="trust-label">Hallmark Certified</div><p class="trust-desc">Guaranteed purity on every single piece</p></div>
+  <div class="trust-cell f"><div class="trust-num">5K+</div><div class="trust-label">Happy Families</div><p class="trust-desc">From weddings to everyday elegance</p></div>
+  <div class="trust-cell f"><div class="trust-num">∞</div><div class="trust-label">Custom Designs</div><p class="trust-desc">Your vision, our craftsmanship</p></div>
+</div>
+
+<!-- COLLECTIONS -->
+<section id="collections">
+  <div class="sec-header f">
+    <span class="label">Browse</span>
+    <h2 class="heading" style="margin-top:8px">Our Collections</h2>
+  </div>
+  <div class="collections-asymmetric">
+    <div class="cat-card tall f">
+      <img src="GOLD-NECKLACES.png" alt="Gold Necklaces"/>
+      <div class="cat-info"><div class="cat-num">01</div><div class="cat-name">Gold Necklaces</div><a href="https://wa.me/917607456789?text=I'm interested in Gold Necklaces" class="cat-cta" target="_blank">Enquire →</a></div>
+    </div>
+    <div class="cat-card f">
+      <img src="DIAMOND-RINGS.png" alt="Diamond Rings"/>
+      <div class="cat-info"><div class="cat-num">02</div><div class="cat-name">Diamond Rings</div><a href="https://wa.me/917607456789?text=I'm interested in Diamond Rings" class="cat-cta" target="_blank">Enquire →</a></div>
+    </div>
+    <div class="cat-card f">
+      <img src="DIAMOND-EARRINGS.png" alt="Diamond Earrings"/>
+      <div class="cat-info"><div class="cat-num">03</div><div class="cat-name">Diamond Earrings</div><a href="https://wa.me/917607456789?text=I'm interested in Diamond Earrings" class="cat-cta" target="_blank">Enquire →</a></div>
+    </div>
+    <div class="cat-card f">
+      <img src="GOLD-CHAINS.png" alt="Gold Chains"/>
+      <div class="cat-info"><div class="cat-num">04</div><div class="cat-name">Gold Chains</div><a href="https://wa.me/917607456789?text=I'm interested in Gold Chains" class="cat-cta" target="_blank">Enquire →</a></div>
+    </div>
+    <div class="cat-card f">
+      <img src="DIAMOND-KADAS.png" alt="Diamond Kadas"/>
+      <div class="cat-info"><div class="cat-num">05</div><div class="cat-name">Diamond Kadas</div><a href="https://wa.me/917607456789?text=I'm interested in Diamond Kadas" class="cat-cta" target="_blank">Enquire →</a></div>
+    </div>
+    <div class="cat-card f">
+      <img src="DIAMOND-BANGLES.png" alt="Diamond Bangles"/>
+      <div class="cat-info"><div class="cat-num">06</div><div class="cat-name">Diamond Bangles</div><a href="https://wa.me/917607456789?text=I'm interested in Diamond Bangles" class="cat-cta" target="_blank">Enquire →</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- SPLIT 1 -->
+<div class="split f-l">
+  <div class="split-img"><img src="2.jpg" alt="Timeless Beauty — Diamond Ring"/></div>
+  <div class="split-body">
+    <span class="label">Signature Ring</span>
+    <h2 class="heading" style="font-size:clamp(30px,3.5vw,52px);margin-top:10px;">Timeless<br/><em>Beauty</em></h2>
+    <p class="body-text">A diamond ring that speaks of commitment, elegance and eternal love. Crafted in rose gold with precision-set diamonds.</p>
+    <a href="https://wa.me/917607456789?text=I'm interested in your Diamond Ring collection" class="split-enquire" target="_blank">Enquire About This Piece</a>
+  </div>
+</div>
+
+<!-- SPLIT 2 -->
+<div class="split reverse f-r">
+  <div class="split-img"><img src="3.jpg" alt="A Forever Promise — Earrings"/></div>
+  <div class="split-body light">
+    <span class="label">Signature Earrings</span>
+    <h2 class="heading" style="font-size:clamp(30px,3.5vw,52px);margin-top:10px;">A Forever<br/><em>Promise</em></h2>
+    <p class="body-text">Golden stud earrings encrusted with brilliant diamonds — designed to elevate every moment, from festive occasions to bridal wear.</p>
+    <a href="https://wa.me/917607456789?text=I'm interested in your Earring collection" class="split-enquire" target="_blank">Enquire About This Piece</a>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-img f-l">
+    <img src="GOLD-NECKLACES__1_.png" alt="Raj Kumar Sarraf Jewellers"/>
+    <div class="about-img-frame"></div>
+  </div>
+  <div class="f-r">
+    <span class="label">Our Story</span>
+    <h2 class="heading" style="color:#fff;margin-top:10px;">The Art of<br/><em>Timeless Craft</em></h2>
+    <p class="body-text">For over 25 years, <strong style="color:rgba(255,255,255,.85)">Raj Kumar Sarraf Jewellers</strong> has been the most trusted name in Akbarpur. We don't just make jewellery — we craft heirlooms that carry your story forward.</p>
+    <p class="body-text" style="margin-top:16px">Founded in the heart of Ambedkar Nagar, every piece is made with BIS hallmark certified gold and diamonds, by artisans who have spent decades perfecting their craft.</p>
+    <div class="about-stats">
+      <div class="about-stat"><div class="about-stat-n">25+</div><div class="about-stat-l">Years</div></div>
+      <div class="about-stat"><div class="about-stat-n">5K+</div><div class="about-stat-l">Families</div></div>
+      <div class="about-stat"><div class="about-stat-n">BIS</div><div class="about-stat-l">Certified</div></div>
+    </div>
+    <div style="margin-top:40px">
+      <a href="https://wa.me/917607456789?text=Hello! I'd like to know more." class="btn-solid" target="_blank">Talk to Our Experts</a>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="sec-header f">
+    <span class="label">Gallery</span>
+    <h2 class="heading" style="margin-top:8px">A Glimpse of Our Work</h2>
+  </div>
+  <div class="masonry f">
+    <div class="masonry-item tall" style="height:528px"><img src="1.jpg" alt="Necklace"/></div>
+    <div class="masonry-item" style="height:260px"><img src="DIAMOND-RINGS.png" alt="Rings"/></div>
+    <div class="masonry-item" style="height:260px"><img src="DIAMOND-BANGLES.png" alt="Bangles"/></div>
+    <div class="masonry-item" style="height:260px"><img src="GOLD-CHAINS.png" alt="Chains"/></div>
+    <div class="masonry-item" style="height:260px"><img src="2.jpg" alt="Ring"/></div>
+    <div class="masonry-item" style="height:260px"><img src="DIAMOND-EARRINGS.png" alt="Earrings"/></div>
+    <div class="masonry-item" style="height:260px"><img src="3.jpg" alt="Earrings"/></div>
+  </div>
+</section>
+
+<!-- WHATSAPP -->
+<section id="whatsapp">
+  <div class="f-l">
+    <span class="label">Get in Touch</span>
+    <h2 class="heading" style="margin-top:10px;">Have a Question?<br/><em>We're Here.</em></h2>
+    <p class="body-text" style="margin-top:16px">Whether you're looking for a wedding set, a gift, or a custom design — our team is ready to help you find exactly what you need.</p>
+  </div>
+  <div class="wa-right f-r">
+    <a href="https://wa.me/917607456789?text=Hello! I'm interested in your jewellery." class="wa-big-btn" target="_blank">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Chat on WhatsApp
+    </a>
+    <div class="wa-or">or call us directly</div>
+    <div class="wa-phone">+91 76074 56789</div>
+    <div class="wa-avail">Available Mon–Sun · Quick Response</div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="sec-header f">
+    <span class="label">Customer Stories</span>
+    <h2 class="heading" style="margin-top:8px">Words of Love</h2>
+  </div>
+  <div class="testi-row">
+    <div class="testi-cell f">
+      <div class="testi-quote">"</div>
+      <p class="testi-body">We got our entire bridal set crafted here for our daughter's wedding. The craftsmanship was extraordinary — every guest kept asking where it was from.</p>
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-name">Sunita Kumari</div>
+      <div class="testi-loc">Ambedkar Nagar</div>
+    </div>
+    <div class="testi-cell f">
+      <div class="testi-quote">"</div>
+      <p class="testi-body">The diamond ring I bought for our anniversary was stunning. Pure quality, beautiful packaging, and the staff helped us choose perfectly within our budget.</p>
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-name">Ramesh Verma</div>
+      <div class="testi-loc">Faizabad</div>
+    </div>
+    <div class="testi-cell f">
+      <div class="testi-quote">"</div>
+      <p class="testi-body">I had a custom bangle set designed for my mother's birthday. Delivered on time, perfect finish, and incredible quality. Will definitely return!</p>
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-name">Priya Mishra</div>
+      <div class="testi-loc">Lucknow</div>
+    </div>
+  </div>
+</section>
+
+<!-- STORE -->
+<section id="store" style="padding:0">
+  <div class="store-map">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3582.18!2d82.5334!3d26.4214!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399a0f71abc12345%3A0x1234567890abcdef!2sShahzad+Pur%2C+Akbarpur%2C+Uttar+Pradesh+224122!5e0!3m2!1sen!2sin!4v1700000000000" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+  <div class="store-panel f-r">
+    <span class="label">Find Us</span>
+    <h2 class="heading">Visit Our Store</h2>
+    <div class="store-row"><div class="store-ico">📍</div><div><div class="store-lbl">Address</div><div class="store-val">Shahzad Pur, Akbarpur<br/>Uttar Pradesh — 224122</div></div></div>
+    <div class="store-row"><div class="store-ico">📞</div><div><div class="store-lbl">Phone</div><div class="store-val"><a href="tel:+917607456789">+91 76074 56789</a></div></div></div>
+    <div class="store-row"><div class="store-ico">✉</div><div><div class="store-lbl">Email</div><div class="store-val"><a href="mailto:contact@rajkumarsharraf.com">contact@rajkumarsharraf.com</a></div></div></div>
+    <div class="store-hours">
+      <div class="store-hour-row"><span>Mon – Saturday</span><span>10:00 AM – 8:00 PM</span></div>
+      <div class="store-hour-row"><span>Sunday</span><span>11:00 AM – 6:00 PM</span></div>
+    </div>
+    <a href="https://www.google.com/maps?daddr=Shahzad+Pur,+Akbarpur,+Uttar+Pradesh+224122" class="dir-btn" target="_blank">Get Directions →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-main">
+    <div>
+      <div class="foot-logo"><img src="logo.png" alt="Raj Kumar Sarraf Jewellers"/></div>
+      <p class="foot-desc">Crafting timeless jewellery for life's most precious moments — with love, artistry, and the finest gold. Trusted in Akbarpur, Uttar Pradesh since 1999.</p>
+      <div class="foot-socials">
+        <a href="https://www.facebook.com/rajkumarsarrafjewellers/" class="soc" target="_blank">f</a>
+        <a href="https://www.instagram.com/rajkumarsarraf916/" class="soc" target="_blank">ig</a>
+        <a href="https://wa.me/917607456789" class="soc" target="_blank">w</a>
+      </div>
+    </div>
+    <div>
+      <div class="foot-col-title">Quick Links</div>
+      <ul class="foot-links">
+        <li><a href="#collections">Collections</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#store">Visit Store</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="foot-col-title">Categories</div>
+      <ul class="foot-links">
+        <li><a href="#">Diamond Rings</a></li>
+        <li><a href="#">Diamond Earrings</a></li>
+        <li><a href="#">Diamond Kadas</a></li>
+        <li><a href="#">Gold Necklaces</a></li>
+        <li><a href="#">Gold Chains</a></li>
+        <li><a href="#">Diamond Bangles</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="foot-col-title">Contact</div>
+      <div class="foot-contact">
+        <div class="fci"><span class="fci-ico">📍</span><span class="fci-txt">Shahzad Pur, Akbarpur<br/>Uttar Pradesh 224122</span></div>
+        <div class="fci"><span class="fci-ico">📞</span><span class="fci-txt"><a href="tel:+917607456789">+91 76074 56789</a></span></div>
+        <div class="fci"><span class="fci-ico">📸</span><span class="fci-txt"><a href="https://www.instagram.com/rajkumarsarraf916/" target="_blank">@rajkumarsarraf916</a><br/><a href="https://www.facebook.com/rajkumarsarrafjewellers/" target="_blank">rajkumarsarrafjewellers</a></span></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <p class="foot-copy">© 2024 <span>Raj Kumar Sarraf Jewellers</span>. All rights reserved.</p>
+    <a href="#hero" class="back-top">↑ Back to Top</a>
+  </div>
+</footer>
+
+<script>
+  /* ── NAV: transparent on hero, solid after ── */
+  const nav = document.getElementById('nav');
+  const hero = document.getElementById('hero');
+  function checkNav() {
+    if (window.scrollY > hero.offsetHeight - 80) {
+      nav.classList.remove('transparent'); nav.classList.add('solid');
+    } else {
+      nav.classList.remove('solid'); nav.classList.add('transparent');
+    }
+  }
+  window.addEventListener('scroll', checkNav);
+  checkNav();
+
+  /* ── DRAWER ── */
+  function openD() { document.getElementById('drawer').classList.add('open'); }
+  function closeD() { document.getElementById('drawer').classList.remove('open'); }
+
+  /* ── HERO SLIDER ── */
+  const TOTAL = 3;
+  let current = 0;
+  let autoTimer;
+
+  function resetSlideAnim(idx) {
+    // Reset text animations on the active slide so they replay
+    const slide = document.getElementById('slide-' + idx);
+    const els = slide.querySelectorAll('.slide-tag, .slide-h1, .slide-p, .slide-btns');
+    els.forEach(el => {
+      el.style.transition = 'none';
+      el.style.opacity = '0';
+      el.style.transform = el.classList.contains('slide-tag') || el.classList.contains('slide-p') || el.classList.contains('slide-btns')
+        ? 'translateY(18px)' : 'translateY(28px)';
+    });
+  }
+
+  function activateSlide(idx) {
+    const slides = document.querySelectorAll('.slide');
+    const bars = document.querySelectorAll('.slide-bar');
+
+    // Reset all
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'prev');
+      bars[i].classList.remove('active');
+      // Reset bar animation
+      bars[i].style.animation = 'none';
+      bars[i].offsetHeight; // reflow
+    });
+
+    // Activate new
+    resetSlideAnim(idx);
+    // Small delay so reset sticks before adding active
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const slide = document.getElementById('slide-' + idx);
+        const els = slide.querySelectorAll('.slide-tag, .slide-h1, .slide-p, .slide-btns');
+        els.forEach(el => { el.style.transition = ''; });
+        slide.classList.add('active');
+        bars[idx].classList.add('active');
+      });
+    });
+
+    // Update counter
+    const numEl = document.getElementById('slideNum');
+    if (numEl) numEl.innerHTML = '<span>0' + (idx+1) + '</span> / 0' + TOTAL;
+
+    current = idx;
+  }
+
+  function changeSlide(dir) {
+    clearInterval(autoTimer);
+    let next = (current + dir + TOTAL) % TOTAL;
+    activateSlide(next);
+    startAuto();
+  }
+
+  function goToSlide(idx) {
+    clearInterval(autoTimer);
+    activateSlide(idx);
+    startAuto();
+  }
+
+  function startAuto() {
+    clearInterval(autoTimer);
+    autoTimer = setInterval(() => {
+      changeSlide(1);
+    }, 6000);
+  }
+
+  // Touch/swipe support for mobile
+  let touchStartX = 0;
+  const heroEl = document.getElementById('hero');
+  heroEl.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive:true });
+  heroEl.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) changeSlide(diff > 0 ? 1 : -1);
+  });
+
+  // Init
+  activateSlide(0);
+  startAuto();
+
+  /* ── SCROLL FADE IN ── */
+  const all = document.querySelectorAll('.f,.f-l,.f-r');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('i'); io.unobserve(e.target); } });
+  }, { threshold: 0.07 });
+  all.forEach(el => io.observe(el));
+</script>
+</body>
+</html>
